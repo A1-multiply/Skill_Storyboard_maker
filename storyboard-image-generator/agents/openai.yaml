@@ -1,0 +1,7 @@
+interface:
+  display_name: "A1 Storyboard Maker"
+  short_description: "Create connected storyboard sheet images."
+  default_prompt: "Use $a1-storyboard-maker to create connected storyboard sheet images from my idea, script, article, or reference."
+
+policy:
+  allow_implicit_invocation: true
