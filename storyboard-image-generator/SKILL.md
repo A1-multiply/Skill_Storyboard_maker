@@ -1,15 +1,40 @@
 ---
 name: a1-storyboard-maker
-description: Create sequential connected storyboard sheet images from a user's idea, script, article, treatment, text reference, image reference, or rough brief. Use when Codex should ask for references, storyboard style, sheet/page count, cuts per sheet, and aspect ratio, then generate visually consistent numbered storyboard pages where the story continues across sheets. Multiple sheets are never alternate versions; cut numbers must continue across pages.
+description: Create sequential storyboard sheets or consistent character-sheet images from a user's idea, script, article, character description, or visual reference. Use when Codex should route the request to option 1 storyboard or option 2 character sheet, ask only for missing references, image count, and aspect ratio, then generate one or more production-ready sheets. Storyboard pages must continue across sheets; character sheets must preserve the same character identity across views and pages.
 ---
 
-# A1 Storyboard Maker
+# A1 Storyboard And Character Sheet Maker
 
-Use this skill to turn a user brief into a sequence of connected storyboard sheet images. Preserve continuity across every sheet and cut: characters, wardrobe, props, setting, camera language, aspect ratio, mood, and visual style.
+This skill has two modes:
 
-## Absolute Rule: Multiple Sheets Are One Continuing Story
+1. Storyboard
+2. Character sheet
 
-When the user asks for multiple storyboard sheets/pages, they mean one storyboard sequence split across multiple pages.
+## Route The Request First
+
+Determine the mode from the user's request before asking questions.
+
+- Use option 1 when the user asks for a storyboard, scene sequence, shot plan, cuts, panels, ad sequence, video plan, or connected story pages.
+- Use option 2 when the user asks for a character sheet, model sheet, turnaround, expression sheet, pose sheet, character reference board, or consistent multi-view character design.
+- If the request clearly matches one mode, proceed with that mode. Do not ask the user to choose again.
+- If the request is unclear or does not clearly match either mode, ask:
+
+```markdown
+어떤 작업을 원하시나요?
+
+1. 스토리보드
+2. 캐릭터 시트
+```
+
+Do not mix both modes unless the user explicitly requests both.
+
+# Option 1: Storyboard
+
+Turn a user brief into connected storyboard sheet images. Preserve continuity across every sheet and cut: characters, wardrobe, props, setting, camera language, aspect ratio, mood, and visual style.
+
+## Absolute Storyboard Rule
+
+Multiple storyboard sheets are one continuing story split across pages.
 
 - Never treat multiple sheets as different versions, options, drafts, or variations.
 - Never generate the same sheet number twice unless the user explicitly asks for variants.
@@ -18,54 +43,32 @@ When the user asks for multiple storyboard sheets/pages, they mean one storyboar
 - Cut numbers must continue across sheets.
 - If sheet 1 has cuts 01-06, sheet 2 must have cuts 07-12.
 - If sheet 1 has cuts 01-08, sheet 2 must have cuts 09-16.
-- If the user says "2장만 만들어", that means two sequential storyboard pages, not two alternate images.
+- If the user says "2장만 만들어", create two sequential storyboard pages, not two alternate images.
 
-## Terminology
+## Storyboard Intake
 
-- A sheet/page is one complete storyboard page image.
-- A cut is one storyboard panel inside a sheet.
-- If the user asks for 3 sheets/pages, create 3 separate sequential storyboard sheet images.
-- Do not combine all sheets into one image.
-- Do not interpret multiple sheets as multiple single-scene images unless the user explicitly asks for one cut per image.
+Ask only for information that is still missing:
 
-## Intake
-
-If the user has not provided enough detail, ask briefly for:
-
-1. Reference material: text, script, article, image, storyboard sample, character description, or visual style reference.
+1. Reference material: script, article, treatment, image, storyboard sample, character description, or visual reference.
 2. Storyboard style: cinematic, webtoon, commercial pitch, rough pencil, animation board, product ad, documentary, etc.
-3. Number of storyboard sheets/pages.
-4. Cuts per sheet, if they care. If omitted, infer 6 or 8 cuts based on story density.
+3. Number of storyboard sheets.
+4. Cuts per sheet, if the user cares. If omitted, infer 6 or 8 based on story density.
 5. Aspect ratio. Default to 16:9.
 
-When the user has no reference, offer two choices in Korean if the user is writing in Korean:
+If the user already supplied enough information, proceed without repeating these questions.
 
-```markdown
-원하는 스토리보드 스타일이나 참고 텍스트/이미지가 있으면 보내주세요.
+## Storyboard Planning
 
-1. 참고자료가 있어요
-2. 참고자료 없이 초안부터 잡아주세요
-
-몇 장으로 만들지, 한 장에 몇 컷을 넣을지, 원하는 비율이 있으면 같이 알려주세요. 비율이 없으면 기본 16:9로 만들게요.
-```
-
-If the user chooses option 1, ask them to provide the reference if they have not already done so.
-
-If the user chooses option 2, accept a short draft idea such as "SF ad", "cafe romance", "startup intro video", or "horror mood" and expand it into a coherent storyboard.
-
-## Planning Workflow
-
-Before generating images, create a compact continuity plan:
+Before generating images, create:
 
 1. Story premise in one sentence.
 2. Visual style: medium, mood, palette, detail level, and lighting.
 3. Continuity bible: recurring characters, wardrobe, props, setting, time of day, and reference constraints.
-4. Sheet list: exactly the requested number of sheets, numbered from 1 to N.
-5. Cut list: cuts inside each sheet, with numbering that must continue across sheets.
+4. Exactly the requested number of sheets.
+5. A continuous cut list across every sheet.
 6. Aspect ratio: user requested ratio, otherwise 16:9.
-7. Generation order: sheet 1 first, sheet 2 next, never restarting at sheet 1.
 
-Use this format for a 2-sheet, 6-cuts-per-sheet storyboard:
+Example for two sheets with six cuts each:
 
 ```markdown
 1장 [이 페이지에서 진행되는 이야기]
@@ -78,82 +81,152 @@ Use this format for a 2-sheet, 6-cuts-per-sheet storyboard:
 
 2장 [1장에서 이어지는 이야기]
 - 07컷 [06컷 직후 이어지는 행동]
-- 08컷 [상황이 확장되는 장면]
+- 08컷 [상황 확장]
 - 09컷 [핵심 선택 또는 위기]
 - 10컷 [해결 방향]
 - 11컷 [결과 또는 공개]
 - 12컷 [마무리 또는 다음 시퀀스 연결점]
 ```
 
-Plan all requested sheets before creating the first image. The sheets must be one continuous sequence, not disconnected concepts and not alternate versions.
+Plan all requested sheets before generating the first image.
 
-## Default Sheet Layout
+## Storyboard Layout
 
-When no layout reference is provided, make each sheet look like a clean production storyboard page:
+When no layout reference is provided:
 
-- Header: `STORYBOARD | [project or story title]`.
-- Optional concept line on the right.
+- Header: `STORYBOARD | [project title]`.
 - Numbered cut cards in a readable grid.
-- Each cut card includes an image area, cut number, short title, shot type, and compact rows for ACTION, DIALOGUE, and TEXT.
-- Optional notes box for tone, color, music, narration, runtime, or production notes.
+- Each card includes an image, cut number, short title, shot type, ACTION, DIALOGUE, and TEXT.
+- Add a notes box only when useful.
+- Use Korean labels when the user writes in Korean.
+- Also provide exact cut descriptions in chat because generated small text may be imperfect.
 
-Use Korean labels when the user writes in Korean. Keep on-image text short and legible. Also provide exact cut descriptions in the chat response because image models may distort small text.
+## Storyboard Generation
 
-## Image Generation Rules
+- Generate one separate image per sheet.
+- Use unique sheet numbers: sheet 1 of N, sheet 2 of N, and so on.
+- Continue cut numbers across sheets.
+- For sheet 2 and later, state the previous final cut and the new cut range.
+- Keep the same aspect ratio and visual continuity across all sheets.
+- Never combine every requested sheet into one image.
+- Never generate alternate versions when the user asked for sequential sheets.
 
-Use the available image generation capability for raster image output.
-
-- Generate one separate image per storyboard sheet.
-- Use unique sheet numbers in prompts: sheet 1 of N, sheet 2 of N, sheet 3 of N.
-- Continue cut numbers across sheets. Do not restart at 01 after sheet 1.
-- For sheet 2 and later, include the previous sheet's final cut as the starting state.
-- Keep the same aspect ratio across all sheets.
-- Keep stable character names and visual descriptors across prompts.
-- Carry over setting, props, wardrobe, color, and design language unless the story intentionally changes.
-- Use clear shot language: establishing shot, close-up, over-the-shoulder, tracking shot, insert shot, wide shot, montage, etc.
-- Make each page visibly read as a storyboard sheet, not a poster or a single full-frame illustration.
-- Never put all requested sheets into one combined image.
-- Never generate alternate versions of the same sheet when the user asked for multiple sheets.
-
-If reference images are provided, identify the important visual features and carry them through all prompts. If the reference is a storyboard layout, match its structure. If reference text is provided, adapt the sequence to it instead of replacing it with a new story.
-
-## Prompt Pattern
-
-Use this structure for each sheet prompt:
+Use this prompt structure:
 
 ```text
-Storyboard sheet [sheet number] of [total sheets], [aspect ratio]. Generate this as one complete storyboard page image, not a combined set of all pages.
-Layout: header, concept line, numbered cut cards in a clean grid, each cut with image area plus ACTION/DIALOGUE/TEXT rows, optional notes box.
-Continuity: [stable characters, wardrobe, props, setting, palette, style, previous sheet ending].
-Sheet story: [what this sheet covers and how it connects to previous/next sheet].
-Cuts: [exact cut numbers for this sheet only, titles, actions, dialogue/narration, text, shot types].
-Mood and lighting: [specific mood, light, color].
-Style: [requested or inferred style], cinematic storyboard sheet, coherent sequence, clean readable production layout, no random extra characters, no watermark.
+Storyboard sheet [sheet number] of [total sheets], [aspect ratio].
+Generate one complete production storyboard page.
+Layout: [header, grid, cut cards, ACTION/DIALOGUE/TEXT rows].
+Continuity: [characters, wardrobe, props, setting, palette, style, previous ending].
+Sheet story: [coverage and connection to previous/next sheet].
+Cuts: [exact cut numbers and shot descriptions for this sheet].
+Mood and lighting: [specific direction].
+No unrelated characters, no watermark.
 ```
 
-For sheet 2 and later, the prompt must include: "Sheet [N] continues after cut [previous final cut]. Cuts on this page are [start]-[end]." Example: "Sheet 2 continues after cut 06. Cuts on this page are 07-12."
+For later pages include: `Sheet 2 continues after cut 06. Cuts on this page are 07-12.`
+
+# Option 2: Character Sheet
+
+Create production-ready character reference sheets from a written description, uploaded reference image, or both. Preserve the character's identity, proportions, face, hairstyle, costume, materials, accessories, and palette across every view and every generated sheet.
+
+## Character Sheet Intake
+
+Ask only for missing information:
+
+1. Character description or reference image.
+2. Desired visual style, if not clear from the reference or description.
+3. Number of character-sheet images to generate.
+4. Aspect ratio. Default to 16:9.
+
+If the user supplies a reference image, analyze and preserve its defining traits. Do not merely copy the reference pose; use it to create a consistent multi-view design.
+
+If only a short description is provided, expand it conservatively into a coherent character design and state the key assumptions before generating.
+
+## Character Identity Bible
+
+Before generation, summarize:
+
+- Name or working label.
+- Age range and role.
+- Body type and proportions.
+- Face shape, skin tone, eyes, eyebrows, nose, lips, and distinctive marks.
+- Hair shape, length, texture, and color.
+- Clothing silhouette, layers, materials, colors, and footwear.
+- Accessories, props, symbols, and small identifying details.
+- Art style, line/detail level, lighting, and palette.
+- Requested sheet count and aspect ratio.
+
+Use the same identity bible in every character-sheet prompt.
+
+## Default Character Sheet Layout
+
+Use a clean, light neutral production-board background with thin dividers and restrained labels. Adapt the layout to the character, but include as many of these as the page can clearly support:
+
+- Large title and `CHARACTER SHEET` subtitle.
+- Turnaround views: front, 3/4 front, profile, and back.
+- Large hero portrait, usually a 3/4 view.
+- Expression studies such as neutral, gentle smile, thoughtful, surprised, angry, sad, or user-requested emotions.
+- Detail close-ups for accessories, costume materials, patterns, tools, scars, tattoos, or signature features.
+- Color palette swatches with short labels.
+- Compact character metadata: name, age range, role, origin/world, personality notes, and costume notes.
+
+For a full-body design, prioritize full-body front, side, 3/4, and back views. For a portrait-focused reference, prioritize head-and-shoulder turnarounds, expressions, and facial details.
+
+Keep labels short and legible. Also provide the exact character specifications in chat because generated text may be imperfect.
+
+## Multiple Character Sheets
+
+Generate one separate image per requested sheet.
+
+- Keep the same character identity across all sheets unless the user explicitly asks for different variants.
+- Do not create duplicate pages.
+- Sheet 1 should normally establish the core turnaround, hero portrait, palette, and essential details.
+- Additional sheets should expand useful coverage: expressions, action poses, hand studies, costume layers, alternate approved outfits, equipment, scale comparisons, or additional detail close-ups.
+- If the user explicitly requests design variations, label each variation clearly and keep the requested invariant traits stable.
+
+## Character Sheet Generation
+
+- Use the user's requested ratio for every image; otherwise use 16:9.
+- Match the reference's medium and design language when supplied.
+- Keep face, body proportions, hairstyle, costume construction, accessories, and colors consistent.
+- Use neutral, readable lighting unless dramatic lighting is part of the requested design.
+- Avoid random wardrobe changes, mirrored asymmetrical details, missing accessories, duplicate limbs, unrelated characters, and watermarks.
+- Make the output read as a professional model sheet, not a collage of unrelated portraits.
+
+Use this prompt structure:
+
+```text
+Character sheet [sheet number] of [total sheets], [aspect ratio].
+Create one complete professional character reference page.
+Character identity: [stable identity bible].
+Layout: [turnarounds, hero portrait, expressions, detail close-ups, palette, metadata].
+Sheet focus: [core turnaround or additional coverage].
+Views and studies: [exact views, expressions, poses, and details].
+Style: [requested medium and visual language].
+Use a clean neutral production-board background, consistent scale and identity, short readable labels, no unrelated characters, no watermark.
+```
 
 ## Response Workflow
 
-After the user answers the intake questions:
+For either mode:
 
-1. Summarize style, references, sheet count, cuts-per-sheet assumption, and aspect ratio.
-2. Present the continuity plan and sheet-by-sheet cut list.
-3. Generate each storyboard sheet image separately and in order.
-4. Return the images with exact cut descriptions in text.
-5. Offer continuation or revision options while preserving continuity.
-
-When the user asks to continue an existing storyboard, reuse the continuity bible and previous final cut as the starting state. Ask only for the number of additional sheets and any new direction if missing.
+1. Identify the selected option.
+2. Ask only for missing inputs.
+3. Summarize references, assumptions, image count, and aspect ratio.
+4. Present a compact plan before generation.
+5. Generate each requested image separately and in order.
+6. Return each image with readable text specifications.
+7. Preserve continuity when revising or extending existing work.
 
 ## Defaults
 
-- Aspect ratio: 16:9.
-- Sheet count: ask before generating unless specified.
-- Cuts per sheet: infer 6 or 8 when omitted.
-- Style: ask first; if the user wants draft mode, infer from the brief.
-- Output: separate connected storyboard sheet images, ordered by sheet number.
-- Language: respond in the user's language.
+- Default aspect ratio: 16:9.
+- Default language: the user's language.
+- Storyboard cuts per sheet: infer 6 or 8 when omitted.
+- Character-sheet image count: ask when omitted.
+- Output: separate image files, one per requested sheet.
 
 ## Safety And Portability
 
-Do not include local usernames, absolute machine paths, private account details, API keys, or hidden metadata in generated prompts or saved skill files.
+Do not include local usernames, absolute machine paths, private account details, API keys, or hidden metadata in prompts or saved skill files.

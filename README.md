@@ -1,1 +1,12 @@
-# Skill-storyboard-a1
+# A1 Storyboard Maker
+
+이미지 생성용 Codex 스킬입니다.
+
+## 지원 기능
+
+- 스토리보드: 여러 장을 만들 때 앞 장면에서 이어지는 연속된 컷과 페이지를 생성합니다.
+- 캐릭터 시트: 레퍼런스 이미지나 캐릭터 설명을 바탕으로 일관된 외형의 시트를 생성합니다.
+
+기본 이미지 비율은 16:9이며, 요청한 장수와 비율에 맞춰 제작할 수 있습니다.
+
+Codex에서 `@A1 Storyboard & Character Maker` 또는 `$a1-storyboard-maker`로 사용할 수 있습니다.
